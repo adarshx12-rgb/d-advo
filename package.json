@@ -1,0 +1,33 @@
+{
+  "name": "hybrid-party-show",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "packageManager": "pnpm@9.15.9",
+  "engines": { "node": ">=22.12" },
+  "scripts": {
+    "dev": "pnpm --parallel --filter @hps/server --filter @hps/web dev",
+    "dev:server": "pnpm --filter @hps/server dev",
+    "dev:web": "pnpm --filter @hps/web dev",
+    "build": "pnpm --filter @hps/web build",
+    "start": "pnpm --parallel --filter @hps/server --filter @hps/web start",
+    "test": "pnpm -r --if-present test",
+    "test:e2e": "playwright test",
+    "lint": "eslint .",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "db:up": "docker compose up -d postgres",
+    "db:generate": "pnpm --filter @hps/database run generate",
+    "db:migrate": "pnpm --filter @hps/database run migrate",
+    "db:deploy": "pnpm --filter @hps/database run deploy",
+    "db:seed": "pnpm --filter @hps/database run seed"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.0",
+    "@playwright/test": "1.64.1",
+    "@types/node": "^24.0.0",
+    "eslint": "^10.14.0",
+    "globals": "^16.0.0",
+    "typescript": "6.0.3",
+    "typescript-eslint": "^8.72.1"
+  }
+}

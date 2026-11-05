@@ -1,0 +1,53 @@
+import { definePack } from "../define";
+
+/** Friendship Destroyer — 30 stream-safe + 10 mature (opt-in only). */
+export const friendshipDestroyerPack = definePack("friendship-destroyer", {
+  SPECTRUM: [
+    { q: "How acceptable is it to screenshot a private chat and send it to someone else?", l: "Never", r: "If it's funny enough", tags: ["texting", "trust"], intensity: 3 },
+    { q: "How long can you borrow a friend's hoodie before it legally becomes yours?", l: "Return it tomorrow", r: "Six months", tags: ["friendship"], intensity: 2 },
+    { q: "How much should you split the bill evenly if you only had a salad?", l: "Itemise everything", r: "Even split, always", tags: ["money", "friendship"], intensity: 3 },
+    { q: "How okay is it to cancel plans because you just don't feel like going?", l: "Selfish", r: "Self-care", tags: ["friendship"], intensity: 3 },
+    { q: "How acceptable is it to have a group chat without one specific friend?", l: "Cruel", r: "Sometimes necessary", tags: ["texting", "friendship"], intensity: 4 },
+    { q: "How much should a friend's opinion matter when choosing your partner?", l: "Zero", r: "They get a veto", tags: ["relationships", "friendship"], intensity: 3 },
+    { q: "How okay is it to bring an uninvited plus-one to a house party?", l: "Rude", r: "The more the merrier", tags: ["social"], intensity: 2 },
+    { q: "How much should you hype a friend's business that you think is bad?", l: "Tell them the truth", r: "Repost everything", tags: ["work", "friendship"], intensity: 3 },
+    { q: "How acceptable is it to remind a friend they still owe you money?", l: "Petty", r: "Completely fair", tags: ["money"], intensity: 3 },
+    { q: "How okay is it to rank your friends, even just in your head?", l: "Monstrous", r: "Everyone does it", tags: ["friendship"], intensity: 4 },
+    { q: "How acceptable is it to date your best friend's sibling?", l: "Off limits forever", r: "Love is love", tags: ["relationships", "family"], mature: true, intensity: 4 },
+    { q: "How okay is it to tell a friend their partner hit on you?", l: "Keep the peace", r: "Tell them immediately", tags: ["relationships", "trust"], mature: true, intensity: 5 },
+    { q: "How acceptable is it to read a friend's messages over their shoulder?", l: "Violation", r: "Phones are public", tags: ["trust"], mature: true, intensity: 4 },
+    { q: "How much should you tell your friends about your love life?", l: "Nothing", r: "Every single detail", tags: ["relationships", "sex"], mature: true, intensity: 4 },
+  ],
+  DEBATE: [
+    { q: "The friend who organises the trip should get the best room.", tags: ["travel", "friendship"], intensity: 2 },
+    { q: "Lying to a friend about liking their cooking is the right thing to do.", tags: ["food", "friendship"], intensity: 2 },
+    { q: "You can stop being friends with someone over a terrible movie opinion.", tags: ["media", "friendship"], intensity: 3 },
+    { q: "Every friendship group needs a designated villain.", tags: ["friendship"], intensity: 3 },
+    { q: "Sharing a streaming password means you can judge each other's watch history.", tags: ["media", "trust"], intensity: 2 },
+    { q: "Going to a friend's wedding is optional if you don't like their partner.", tags: ["relationships"], intensity: 4 },
+    { q: "Long voice notes should be grounds for removal from the group chat.", tags: ["texting"], intensity: 2 },
+    { q: "It's better to have one close friend than ten good ones.", tags: ["friendship"], intensity: 2 },
+    { q: "Dating a friend's ex is fine after six months.", tags: ["exes", "relationships"], mature: true, intensity: 5 },
+    { q: "Hooking up within the friend group always ruins the friend group.", tags: ["relationships", "sex"], mature: true, intensity: 4 },
+    { q: "It's acceptable to lie to protect a friend who's cheating.", tags: ["trust", "relationships"], mature: true, intensity: 5 },
+  ],
+  BLUFF: [
+    { q: "How many friends have you secretly muted on social media?", l: "None", r: "More than I'd admit", tags: ["friendship", "tech"], intensity: 3 },
+    { q: "How likely are you to fake being busy to skip a hangout?", l: "Never", r: "My calendar is fiction", tags: ["friendship"], intensity: 3 },
+    { q: "How often have you laughed at a joke you didn't get?", l: "Never", r: "Daily", tags: ["social"], intensity: 2 },
+    { q: "How much do you judge friends by their music taste?", l: "Not at all", r: "It's everything", tags: ["music", "friendship"], intensity: 2 },
+    { q: "How likely are you to re-gift a present you received?", l: "Never", r: "Already have", tags: ["gifts"], intensity: 2 },
+    { q: "How competitive are you with your closest friend, honestly?", l: "Not at all", r: "Silent rivals", tags: ["friendship"], intensity: 3 },
+    { q: "How often do you rehearse arguments in the shower?", l: "Never", r: "Every shower is a debate", tags: ["habits"], intensity: 1 },
+    { q: "How many of your friends' secrets have you told someone else?", l: "None", r: "Too many", tags: ["trust"], mature: true, intensity: 4 },
+    { q: "How much do you know about your friends' love lives that they don't know you know?", l: "Nothing", r: "Everything", tags: ["relationships", "trust"], mature: true, intensity: 4 },
+  ],
+  FINALE: [
+    { q: "Brutal honesty is the foundation of a real friendship.", tags: ["friendship", "trust"], intensity: 3 },
+    { q: "Money should never be lent between friends.", tags: ["money", "friendship"], intensity: 3 },
+    { q: "A friend who forgets your birthday has failed you.", tags: ["friendship"], intensity: 2 },
+    { q: "It's fine to outgrow childhood friends.", tags: ["friendship"], intensity: 3 },
+    { q: "Group trips reveal who your real friends are.", tags: ["travel", "friendship"], intensity: 2 },
+    { q: "You should always tell your best friend if you see their partner on a dating app.", tags: ["relationships", "trust"], mature: true, intensity: 5 },
+  ],
+});

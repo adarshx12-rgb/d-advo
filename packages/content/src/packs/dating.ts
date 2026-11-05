@@ -1,0 +1,53 @@
+import { definePack } from "../define";
+
+/** Dating & Relationships — 30 stream-safe + 10 mature (adults only, opt-in). */
+export const datingPack = definePack("dating", {
+  SPECTRUM: [
+    { q: "How soon is too soon to say 'I love you'?", l: "First week is fine", r: "Wait a full year", tags: ["relationships"], intensity: 2 },
+    { q: "How acceptable is splitting the bill on a first date?", l: "Unromantic", r: "Obviously fair", tags: ["money", "dating"], intensity: 2 },
+    { q: "How much should your partner's phone be off limits?", l: "Open book", r: "Completely private", tags: ["trust", "tech"], intensity: 3 },
+    { q: "How long can you wait before texting back after a date?", l: "Within the hour", r: "Three days, classic", tags: ["texting", "dating"], intensity: 2 },
+    { q: "How acceptable is it to still follow your ex on social media?", l: "Red flag", r: "Totally normal", tags: ["exes"], intensity: 3 },
+    { q: "How important is it that your partner likes your friends?", l: "Doesn't matter", r: "Deal breaker", tags: ["relationships", "friendship"], intensity: 2 },
+    { q: "How okay is it to plan a date entirely around food?", l: "Lazy", r: "The only correct date", tags: ["food", "dating"], intensity: 1 },
+    { q: "How much should a couple share one streaming queue?", l: "Separate profiles forever", r: "One queue, one heart", tags: ["media", "relationships"], intensity: 1 },
+    { q: "How acceptable is matching couple outfits?", l: "Cringe", r: "Adorable", tags: ["fashion", "relationships"], intensity: 1 },
+    { q: "How much should a dating profile's photos match reality?", l: "A little magic is fine", r: "Must be from this year", tags: ["dating"], intensity: 2 },
+    { q: "How acceptable is hooking up on a first date?", l: "Too fast", r: "Adults can do what they like", tags: ["sex", "dating"], mature: true, intensity: 4 },
+    { q: "How much should you know about your partner's past relationships?", l: "Nothing", r: "Full history", tags: ["exes", "sex"], mature: true, intensity: 4 },
+    { q: "How okay is it to stay friends with someone you used to sleep with?", l: "Impossible", r: "Totally normal", tags: ["exes", "sex"], mature: true, intensity: 4 },
+    { q: "How acceptable is a friends-with-benefits arrangement?", l: "Always ends badly", r: "Perfectly healthy", tags: ["sex", "relationships"], mature: true, intensity: 4 },
+  ],
+  DEBATE: [
+    { q: "The person who asks someone out should always pay.", tags: ["money", "dating"], intensity: 2 },
+    { q: "Couples should share every password.", tags: ["trust", "tech"], intensity: 3 },
+    { q: "Meeting a partner online is better than meeting them in person.", tags: ["dating", "tech"], intensity: 2 },
+    { q: "It's fine to break up over text if the relationship was short.", tags: ["relationships", "texting"], intensity: 3 },
+    { q: "Having separate bedrooms is the secret to a happy relationship.", tags: ["relationships", "home"], intensity: 2 },
+    { q: "Grand romantic gestures in public are more embarrassing than sweet.", tags: ["dating"], intensity: 2 },
+    { q: "You should never date someone who doesn't like your pets.", tags: ["pets", "relationships"], intensity: 2 },
+    { q: "Getting back together with an ex never works.", tags: ["exes"], intensity: 3 },
+    { q: "Physical chemistry matters more than shared interests.", tags: ["sex", "relationships"], mature: true, intensity: 4 },
+    { q: "Talking about your 'number' early in a relationship is a good idea.", tags: ["sex"], mature: true, intensity: 5 },
+    { q: "Open relationships can be healthier than monogamous ones.", tags: ["sex", "relationships"], mature: true, intensity: 5 },
+  ],
+  BLUFF: [
+    { q: "How many dating apps have you downloaded and deleted?", l: "None", r: "I've lost count", tags: ["dating", "tech"], intensity: 2 },
+    { q: "How likely are you to stalk a date's social media beforehand?", l: "Never", r: "Full background check", tags: ["dating", "tech"], intensity: 2 },
+    { q: "How cheesy are your texts to someone you like?", l: "Cool and distant", r: "Pure cheese", tags: ["texting", "dating"], intensity: 1 },
+    { q: "How many times have you rehearsed asking someone out?", l: "Never", r: "Dozens", tags: ["dating"], intensity: 2 },
+    { q: "How much do you judge a date by their shoes?", l: "Not at all", r: "Instant verdict", tags: ["fashion", "dating"], intensity: 1 },
+    { q: "How likely are you to cry at a wedding?", l: "Never", r: "Before the vows", tags: ["relationships"], intensity: 1 },
+    { q: "How romantic do you secretly think you are?", l: "Not at all", r: "Movie-level", tags: ["relationships"], intensity: 1 },
+    { q: "How adventurous are you in the bedroom, honestly?", l: "Very traditional", r: "Anything goes", tags: ["sex"], mature: true, intensity: 5 },
+    { q: "How many people have you kissed at a party?", l: "None", r: "I don't keep count", tags: ["dating"], mature: true, intensity: 4 },
+  ],
+  FINALE: [
+    { q: "Love at first sight is real.", tags: ["relationships"], intensity: 2 },
+    { q: "You should marry your best friend rather than a passionate stranger.", tags: ["relationships", "friendship"], intensity: 3 },
+    { q: "Exes should never be friends.", tags: ["exes"], intensity: 3 },
+    { q: "Long-distance relationships are worth it.", tags: ["relationships", "travel"], intensity: 2 },
+    { q: "Arguing is a sign of a healthy relationship.", tags: ["relationships"], intensity: 3 },
+    { q: "Sexual compatibility should be tested before getting serious.", tags: ["sex", "relationships"], mature: true, intensity: 5 },
+  ],
+});

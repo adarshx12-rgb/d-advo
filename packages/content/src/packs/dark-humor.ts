@@ -1,0 +1,53 @@
+import { definePack } from "../define";
+
+/** Dark Humor — 30 stream-safe + 10 mature (opt-in only). */
+export const darkHumorPack = definePack("dark-humor", {
+  SPECTRUM: [
+    { q: "How acceptable is it to make a joke at your own funeral via a pre-recorded video?", l: "Disrespectful", r: "Mandatory", tags: ["death"], intensity: 2 },
+    { q: "How much would you trust a haunted house that's half the normal rent?", l: "Not for free", r: "Ghosts can split the bills", tags: ["home"], intensity: 1 },
+    { q: "How okay is it to rehearse what you'd say if you were on a true-crime documentary?", l: "Deeply suspicious", r: "Just being prepared", tags: ["media"], intensity: 2 },
+    { q: "How fair is it to haunt someone who spoiled a show for you?", l: "Let it go, even in death", r: "Eternal justice", tags: ["death", "media"], intensity: 2 },
+    { q: "How acceptable is it to leave your houseplants to a specific person in your will?", l: "Dramatic", r: "They were my children", tags: ["death", "home"], intensity: 1 },
+    { q: "How much should you trust a fortune teller who seems nervous?", l: "Walk out", r: "Pay extra for honesty", tags: ["supernatural"], intensity: 1 },
+    { q: "How okay is it to name your wifi something ominous to scare the neighbours?", l: "Too far", r: "Community theatre", tags: ["tech"], intensity: 1 },
+    { q: "How acceptable is laughing when someone trips, if they're fine?", l: "Monstrous", r: "Physics is comedy", tags: ["social"], intensity: 2 },
+    { q: "How prepared are you, emotionally, for a zombie outbreak?", l: "First to go", r: "I have a laminated plan", tags: ["survival"], intensity: 1 },
+    { q: "How acceptable is it to tell a ghost to pay rent?", l: "Rude to the dead", r: "Everyone contributes", tags: ["supernatural"], intensity: 1 },
+    { q: "How acceptable is a joke about a recent celebrity death?", l: "Never", r: "Comedy has no waiting period", tags: ["death"], mature: true, intensity: 4 },
+    { q: "How much should someone's drunk confession count once they're sober?", l: "Doesn't count", r: "Legally binding", tags: ["alcohol"], mature: true, intensity: 3 },
+    { q: "How okay is it to joke about your own therapy sessions at a party?", l: "Way too much", r: "Healing out loud", tags: ["health"], mature: true, intensity: 4 },
+    { q: "How acceptable is it to plan which friend gets your browser history deleted?", l: "Paranoid", r: "Essential estate planning", tags: ["death", "tech"], mature: true, intensity: 3 },
+  ],
+  DEBATE: [
+    { q: "A cursed object that gives you free coffee for life is worth the curse.", tags: ["supernatural"], intensity: 2 },
+    { q: "If ghosts exist, they should be allowed to vote.", tags: ["supernatural"], intensity: 1 },
+    { q: "Funerals should have a dress code of 'whatever the deceased found funniest'.", tags: ["death"], intensity: 2 },
+    { q: "The villain in most stories had a point.", tags: ["media"], intensity: 1 },
+    { q: "It's better to be the first one taken in a horror movie than the last survivor.", tags: ["media"], intensity: 2 },
+    { q: "Pets should be allowed to testify in court about their owners.", tags: ["pets"], intensity: 1 },
+    { q: "A haunted mansion is a better investment than a normal flat.", tags: ["home", "money"], intensity: 1 },
+    { q: "Knowing the exact date of your death would improve your life.", tags: ["death"], intensity: 3 },
+    { q: "Roasting someone at their own memorial is the highest form of love.", tags: ["death"], mature: true, intensity: 4 },
+    { q: "Hangovers are a fair price for the stories.", tags: ["alcohol"], mature: true, intensity: 3 },
+    { q: "Dark jokes are the healthiest way to deal with tragedy.", tags: ["death"], mature: true, intensity: 4 },
+  ],
+  BLUFF: [
+    { q: "How long would you last alone in a 'definitely haunted' house overnight?", l: "Five minutes", r: "I'd move in", tags: ["supernatural"], intensity: 1 },
+    { q: "How detailed is your plan for what happens to your stuff when you're gone?", l: "No plan at all", r: "Spreadsheet with tabs", tags: ["death"], intensity: 2 },
+    { q: "How often do you check that the stove is off before leaving?", l: "Never", r: "I've gone back three times", tags: ["habits"], intensity: 1 },
+    { q: "How likely are you to investigate a strange noise in the night?", l: "Under the duvet", r: "Torch in hand", tags: ["horror"], intensity: 1 },
+    { q: "How many horror movies could you watch back to back?", l: "None", r: "A full marathon", tags: ["media"], intensity: 1 },
+    { q: "How much do you enjoy reading conspiracy theories for fun?", l: "Not at all", r: "It's my hobby", tags: ["media"], intensity: 2 },
+    { q: "How dramatic would your last words be, honestly?", l: "Plain and quiet", r: "A three-act monologue", tags: ["death"], intensity: 2 },
+    { q: "How many drinks before you text someone you shouldn't?", l: "One", r: "I never would", tags: ["alcohol", "exes"], mature: true, intensity: 3 },
+    { q: "How morbid is your search history, honestly?", l: "Spotless", r: "I'd be on a watchlist", tags: ["death", "tech"], mature: true, intensity: 4 },
+  ],
+  FINALE: [
+    { q: "If you could know how you die, you should find out.", tags: ["death"], intensity: 3 },
+    { q: "A curse that makes you always tell the truth is worse than one that makes you always lie.", tags: ["supernatural"], intensity: 2 },
+    { q: "Being a ghost for eternity sounds like a pretty good deal.", tags: ["death", "supernatural"], intensity: 2 },
+    { q: "You should be allowed to choose your own funeral playlist, even if it's all memes.", tags: ["death"], intensity: 2 },
+    { q: "Surviving a zombie apocalypse is not worth the effort.", tags: ["survival"], intensity: 2 },
+    { q: "Some secrets should go to the grave, even from your closest friends.", tags: ["death", "friendship"], mature: true, intensity: 4 },
+  ],
+});

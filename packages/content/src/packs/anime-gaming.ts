@@ -1,0 +1,53 @@
+import { definePack } from "../define";
+
+/** Anime & Gaming — 30 stream-safe + 10 mature (opt-in only). Original prompts, no franchise references. */
+export const animeGamingPack = definePack("anime-gaming", {
+  SPECTRUM: [
+    { q: "How acceptable is skipping the opening song of a show you love?", l: "Sacrilege", r: "Skip every time", tags: ["anime", "media"], intensity: 1 },
+    { q: "How okay is it to watch a dubbed version instead of subtitles?", l: "Subs only, always", r: "Dubs are often better", tags: ["anime"], intensity: 2 },
+    { q: "How much should filler episodes be skipped?", l: "Watch everything", r: "Skip them all", tags: ["anime"], intensity: 1 },
+    { q: "How acceptable is looking up a walkthrough on your first playthrough?", l: "Cheating", r: "Smart time management", tags: ["games"], intensity: 2 },
+    { q: "How much money is reasonable to spend on a gacha game in a month?", l: "Nothing, ever", r: "Whatever it takes", tags: ["games", "money"], intensity: 3 },
+    { q: "How okay is it to rage quit an online match?", l: "Unforgivable", r: "Self-preservation", tags: ["games"], intensity: 2 },
+    { q: "How acceptable is it to play on easy mode?", l: "Shameful", r: "Games are meant to be fun", tags: ["games"], intensity: 2 },
+    { q: "How much should a game's story matter compared to gameplay?", l: "Gameplay is everything", r: "Story is everything", tags: ["games"], intensity: 1 },
+    { q: "How acceptable is it to own merch for a show you haven't finished?", l: "Poser", r: "Support is support", tags: ["anime", "fandom"], intensity: 1 },
+    { q: "How fair is it to blame lag for every loss?", l: "Own your losses", r: "Lag is always guilty", tags: ["games"], intensity: 1 },
+    { q: "How okay is it to trash-talk strangers in voice chat?", l: "Never", r: "Part of the game", tags: ["games"], mature: true, intensity: 4 },
+    { q: "How acceptable is drinking every time a character monologues?", l: "Bad idea", r: "Excellent tradition", tags: ["alcohol", "anime"], mature: true, intensity: 4 },
+    { q: "How much should fan art of characters be kept 'family friendly'?", l: "Always", r: "Adults can make what they want", tags: ["fandom", "sex"], mature: true, intensity: 4 },
+    { q: "How acceptable is it to have a crush on an animated character?", l: "Concerning", r: "Completely normal", tags: ["anime", "relationships"], mature: true, intensity: 3 },
+  ],
+  DEBATE: [
+    { q: "Speedrunning glitches should count as legitimate skill.", tags: ["games"], intensity: 2 },
+    { q: "Every long-running series should end after three seasons.", tags: ["anime", "media"], intensity: 2 },
+    { q: "Single-player games are better than multiplayer games.", tags: ["games"], intensity: 2 },
+    { q: "Remakes are almost always worse than the originals.", tags: ["games", "media"], intensity: 2 },
+    { q: "A villain with a tragic backstory is more interesting than a pure evil one.", tags: ["anime", "media"], intensity: 1 },
+    { q: "Loot boxes should be banned.", tags: ["games", "money"], intensity: 3 },
+    { q: "The manga or source book is always better than the adaptation.", tags: ["anime", "media"], intensity: 2 },
+    { q: "Couch co-op is better than online co-op.", tags: ["games"], intensity: 1 },
+    { q: "Toxic chat is just part of competitive gaming culture.", tags: ["games"], mature: true, intensity: 4 },
+    { q: "Fan service ruins otherwise good shows.", tags: ["anime", "sex"], mature: true, intensity: 4 },
+    { q: "It's fine to date someone you met in an online game before meeting in person.", tags: ["games", "dating"], mature: true, intensity: 3 },
+  ],
+  BLUFF: [
+    { q: "How many hours have you put into your most-played game?", l: "Under ten", r: "Thousands", tags: ["games"], intensity: 1 },
+    { q: "How many unfinished games are in your library?", l: "None", r: "An embarrassing pile", tags: ["games"], intensity: 1 },
+    { q: "How likely are you to cry at a season finale?", l: "Never", r: "Guaranteed", tags: ["anime"], intensity: 1 },
+    { q: "How much of a sore loser are you at fighting games?", l: "Gracious", r: "Controller in danger", tags: ["games"], intensity: 2 },
+    { q: "How many times have you rewatched your favourite series?", l: "Once", r: "More than ten", tags: ["anime"], intensity: 1 },
+    { q: "How likely are you to pre-order a game before reviews come out?", l: "Never", r: "Day one, every time", tags: ["games", "money"], intensity: 2 },
+    { q: "How strong is your opinion about the 'best' character in your favourite show?", l: "No favourites", r: "I'd fight about it", tags: ["fandom"], intensity: 2 },
+    { q: "How much money have you spent on in-game cosmetics, honestly?", l: "Nothing", r: "I'd rather not say", tags: ["games", "money"], mature: true, intensity: 3 },
+    { q: "How many times have you stayed up all night gaming before an important day?", l: "Never", r: "More than I can count", tags: ["games", "habits"], mature: true, intensity: 3 },
+  ],
+  FINALE: [
+    { q: "Video games are the greatest storytelling medium.", tags: ["games", "media"], intensity: 2 },
+    { q: "Difficulty settings ruin a game's intended experience.", tags: ["games"], intensity: 2 },
+    { q: "Spoilers for a series that ended years ago are fair game.", tags: ["anime", "media"], intensity: 2 },
+    { q: "Being a professional gamer is a real sport.", tags: ["games", "sports"], intensity: 2 },
+    { q: "Open-world games are better than linear games.", tags: ["games"], intensity: 1 },
+    { q: "Fandoms should be allowed to 'fix' an ending they hated with their own canon.", tags: ["fandom"], mature: true, intensity: 3 },
+  ],
+});

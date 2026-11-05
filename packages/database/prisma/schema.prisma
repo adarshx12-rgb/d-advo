@@ -1,0 +1,501 @@
+// Hybrid Party Show — persistent data model.
+//
+// Ephemeral vs persistent (see docs/architecture.md):
+// - Live match state (phases, timers, secret roles, sealed answers) lives in server memory only.
+// - When a match completes, only revealed/derived results are written: standings, score events,
+//   revealed debate/bluff outcomes and the public event timeline.
+// - OpinionEntry rows are written ONLY when a player explicitly opts into persistence (not offered in
+//   the MVP) and always carry an expiry. By default the Opinion Vault is session-only.
+// - All money is stored in integer minor units (paise). All timestamps are UTC (timestamptz).
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  HOST
+  ADMIN
+}
+
+enum ProductKind {
+  CONTENT_PACK
+  COSMETIC_THEME
+  CREATOR
+  BUNDLE
+}
+
+enum PurchaseStatus {
+  CREATED
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum EntitlementStatus {
+  ACTIVE
+  REVOKED
+}
+
+enum PaymentMode {
+  MOCK
+  RAZORPAY
+}
+
+enum ContentRating {
+  SAFE
+  MATURE
+}
+
+enum PromptMode {
+  SPECTRUM
+  DEBATE
+  BLUFF
+  FINALE
+}
+
+enum ReportStatus {
+  OPEN
+  REVIEWED
+  ACTIONED
+  DISMISSED
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  /// scrypt hash: salt:hash (hex)
+  passwordHash String
+  displayName  String   @db.VarChar(40)
+  role         UserRole @default(HOST)
+  createdAt    DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt    DateTime @updatedAt @db.Timestamptz(3)
+
+  sessions     UserSession[]
+  purchases    Purchase[]
+  entitlements Entitlement[]
+  cosmetics    UserCosmetic[]
+  branding     StreamerBranding?
+  profile      PlayerProfile?
+  hostedRooms  Room[]
+}
+
+/// Login session for an account. Only a SHA-256 hash of the token is stored.
+model UserSession {
+  id        String   @id @default(cuid())
+  userId    String
+  tokenHash String   @unique
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  expiresAt DateTime @db.Timestamptz(3)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+/// Guest play needs no account. Only a SHA-256 hash of the guest token is stored.
+model GuestSession {
+  id         String   @id @default(cuid())
+  tokenHash  String   @unique
+  createdAt  DateTime @default(now()) @db.Timestamptz(3)
+  lastSeenAt DateTime @default(now()) @db.Timestamptz(3)
+  expiresAt  DateTime @db.Timestamptz(3)
+
+  @@index([expiresAt])
+}
+
+model PlayerProfile {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  displayName String   @db.VarChar(20)
+  avatar      String   @db.VarChar(20)
+  /// Equipped cosmetic card theme id
+  cardTheme   String   @default("classic")
+  updatedAt   DateTime @updatedAt @db.Timestamptz(3)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Room {
+  id         String       @id @default(cuid())
+  code       String       @db.Char(4)
+  hostUserId String?
+  /// Settings snapshot (JSON) at creation; live settings are held in memory.
+  settings   Json
+  createdAt  DateTime     @default(now()) @db.Timestamptz(3)
+  closedAt   DateTime?    @db.Timestamptz(3)
+  host       User?        @relation(fields: [hostUserId], references: [id], onDelete: SetNull)
+  members    RoomMember[]
+  matches    Match[]
+
+  @@index([code, closedAt])
+}
+
+model RoomMember {
+  id          String   @id @default(cuid())
+  roomId      String
+  /// Server-generated player id (never a display name)
+  playerId    String
+  displayName String   @db.VarChar(20)
+  joinedAt    DateTime @default(now()) @db.Timestamptz(3)
+  room        Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  @@unique([roomId, playerId])
+}
+
+model Match {
+  id          String         @id
+  roomId      String
+  seed        String
+  config      Json
+  startedAt   DateTime       @db.Timestamptz(3)
+  completedAt DateTime?      @db.Timestamptz(3)
+  room        Room           @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  players     MatchPlayer[]
+  rounds      MatchRound[]
+  events      GameEvent[]
+  scoreEvents ScoreEvent[]
+  opinions    OpinionEntry[]
+  predictions Prediction[]
+  debates     Debate[]
+  bluffs      BluffAssignment[]
+  contracts   ContractAssignment[]
+  cardPlays   ChaosCardPlay[]
+
+  @@index([roomId])
+}
+
+model MatchPlayer {
+  id          String  @id @default(cuid())
+  matchId     String
+  playerId    String
+  displayName String  @db.VarChar(20)
+  seat        Int
+  finalScore  Int     @default(0)
+  finalRank   Int?
+  sharedRank  Boolean @default(false)
+  match       Match   @relation(fields: [matchId], references: [id], onDelete: Cascade)
+
+  @@unique([matchId, playerId])
+  @@unique([matchId, seat])
+}
+
+model MatchRound {
+  id       String @id @default(cuid())
+  matchId  String
+  /// CALIBRATION | COURT | BLUFF | FINALE
+  segment  String
+  index    Int
+  promptId String
+  match    Match  @relation(fields: [matchId], references: [id], onDelete: Cascade)
+
+  @@unique([matchId, segment, index])
+}
+
+/// Public timeline only — never secret values.
+model GameEvent {
+  id      String   @id @default(cuid())
+  matchId String
+  seq     Int
+  kind    String
+  text    String
+  at      DateTime @db.Timestamptz(3)
+  match   Match    @relation(fields: [matchId], references: [id], onDelete: Cascade)
+
+  @@unique([matchId, seq])
+}
+
+/// Opt-in only (session-only by default). Always expires.
+model OpinionEntry {
+  id             String   @id
+  matchId        String
+  playerId       String
+  promptId       String
+  promptSnapshot String
+  leftLabel      String
+  rightLabel     String
+  value          Int
+  sourceRound    String
+  visibility     String
+  createdAt      DateTime @db.Timestamptz(3)
+  expiresAt      DateTime @db.Timestamptz(3)
+  match          Match    @relation(fields: [matchId], references: [id], onDelete: Cascade)
+
+  @@index([expiresAt])
+  @@index([matchId, playerId])
+}
+
+model Prediction {
+  id          String @id @default(cuid())
+  matchId     String
+  roundIndex  Int
+  predictorId String
+  targetId    String
+  value       Int
+  points      Int
+  match       Match  @relation(fields: [matchId], references: [id], onDelete: Cascade)
+
+  @@unique([matchId, roundIndex, predictorId])
+}
+
+model Debate {
+  id          String       @id @default(cuid())
+  matchId     String
+  /// hearing index, or -1 for the Final Verdict
+  hearing     Int
+  promptId    String
+  debaterAId  String
+  debaterBId  String
+  sideA       String
+  swapped     Boolean      @default(false)
+  winnerId    String
+  tiebreak    Boolean      @default(false)
+  match       Match        @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  votes       DebateVote[]
+
+  @@unique([matchId, hearing])
+}
+
+model DebateVote {
+  id       String @id @default(cuid())
+  debateId String
+  voterId  String
+  winnerId String
+  debate   Debate @relation(fields: [debateId], references: [id], onDelete: Cascade)
+
+  @@unique([debateId, voterId])
+}
+
+model BluffAssignment {
+  id        String      @id @default(cuid())
+  matchId   String
+  turn      Int
+  speakerId String
+  role      String
+  claimed   Int
+  promptId  String
+  match     Match       @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  votes     BluffVote[]
+
+  @@unique([matchId, turn])
+}
+
+model BluffVote {
+  id           String          @id @default(cuid())
+  assignmentId String
+  voterId      String
+  guess        String
+  correct      Boolean
+  assignment   BluffAssignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+
+  @@unique([assignmentId, voterId])
+}
+
+model ContractAssignment {
+  id       String @id @default(cuid())
+  matchId  String
+  playerId String
+  type     String
+  status   String
+  match    Match  @relation(fields: [matchId], references: [id], onDelete: Cascade)
+
+  @@unique([matchId, playerId])
+}
+
+model ChaosCardPlay {
+  id        String   @id
+  matchId   String
+  playerId  String
+  card      String
+  unitKey   String
+  outcome   String
+  at        DateTime @db.Timestamptz(3)
+  match     Match    @relation(fields: [matchId], references: [id], onDelete: Cascade)
+
+  @@index([matchId])
+}
+
+/// Replay-safe: (matchId, eventKey) is unique so a rule can never be double counted.
+model ScoreEvent {
+  id       String   @id @default(cuid())
+  matchId  String
+  eventKey String
+  playerId String
+  type     String
+  amount   Int
+  segment  String
+  label    String
+  detail   Json
+  at       DateTime @db.Timestamptz(3)
+  match    Match    @relation(fields: [matchId], references: [id], onDelete: Cascade)
+
+  @@unique([matchId, eventKey])
+  @@index([matchId, playerId])
+}
+
+model ContentPack {
+  id          String   @id
+  name        String
+  description String
+  enabled     Boolean  @default(true)
+  productId   String?  @unique
+  prompts     Prompt[]
+  product     Product? @relation(fields: [productId], references: [id])
+}
+
+model Prompt {
+  id            String        @id
+  packId        String
+  mode          PromptMode
+  question      String
+  leftLabel     String
+  rightLabel    String
+  tags          String[]
+  contentRating ContentRating
+  streamSafe    Boolean
+  intensity     Int
+  difficulty    Int
+  language      String        @default("en")
+  enabled       Boolean       @default(true)
+  createdAt     DateTime      @default(now()) @db.Timestamptz(3)
+  updatedAt     DateTime      @updatedAt @db.Timestamptz(3)
+  pack          ContentPack   @relation(fields: [packId], references: [id])
+  reports       ContentReport[]
+
+  @@index([packId, mode, enabled])
+  @@index([contentRating, streamSafe])
+}
+
+model Product {
+  id           String        @id
+  kind         ProductKind
+  name         String
+  tagline      String
+  description  String
+  published    Boolean       @default(false)
+  packId       String?
+  themeId      String?
+  /// Product ids granted by a bundle
+  bundleItems  String[]
+  accent       String
+  createdAt    DateTime      @default(now()) @db.Timestamptz(3)
+  updatedAt    DateTime      @updatedAt @db.Timestamptz(3)
+  prices       Price[]
+  purchases    Purchase[]
+  entitlements Entitlement[]
+  pack         ContentPack?
+}
+
+/// Prices are versioned rows; the active one is used for new purchases. NULL amount = not for sale.
+model Price {
+  id          String     @id @default(cuid())
+  productId   String
+  amountPaise Int?
+  currency    String     @default("INR")
+  active      Boolean    @default(true)
+  createdAt   DateTime   @default(now()) @db.Timestamptz(3)
+  product     Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
+  purchases   Purchase[]
+
+  @@index([productId, active])
+}
+
+model Purchase {
+  id              String         @id @default(cuid())
+  userId          String
+  productId       String
+  priceId         String
+  amountPaise     Int
+  currency        String         @default("INR")
+  mode            PaymentMode
+  status          PurchaseStatus @default(CREATED)
+  providerOrderId String         @unique
+  providerPaymentId String?      @unique
+  receiptNumber   String?        @unique
+  createdAt       DateTime       @default(now()) @db.Timestamptz(3)
+  paidAt          DateTime?      @db.Timestamptz(3)
+  refundedAt      DateTime?      @db.Timestamptz(3)
+  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product         Product        @relation(fields: [productId], references: [id])
+  price           Price          @relation(fields: [priceId], references: [id])
+  entitlements    Entitlement[]
+  events          PaymentEvent[]
+
+  @@index([userId])
+}
+
+model Entitlement {
+  id         String            @id @default(cuid())
+  userId     String
+  productId  String
+  purchaseId String?
+  status     EntitlementStatus @default(ACTIVE)
+  /// Mock entitlements are never honoured in production.
+  mode       PaymentMode
+  grantedAt  DateTime          @default(now()) @db.Timestamptz(3)
+  revokedAt  DateTime?         @db.Timestamptz(3)
+  user       User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product    Product           @relation(fields: [productId], references: [id])
+  purchase   Purchase?         @relation(fields: [purchaseId], references: [id], onDelete: SetNull)
+
+  @@unique([userId, productId])
+  @@index([userId, status])
+}
+
+/// Raw, verified provider webhook events. (provider, providerEventId) unique => webhooks are idempotent.
+model PaymentEvent {
+  id              String      @id @default(cuid())
+  provider        PaymentMode
+  providerEventId String
+  type            String
+  purchaseId      String?
+  payload         Json
+  receivedAt      DateTime    @default(now()) @db.Timestamptz(3)
+  purchase        Purchase?   @relation(fields: [purchaseId], references: [id], onDelete: SetNull)
+
+  @@unique([provider, providerEventId])
+}
+
+model UserCosmetic {
+  id       String   @id @default(cuid())
+  userId   String
+  themeId  String
+  equipped Boolean  @default(false)
+  addedAt  DateTime @default(now()) @db.Timestamptz(3)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, themeId])
+}
+
+model StreamerBranding {
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  /// Server-validated PNG/JPEG/WebP data, max 512 KB
+  logoMime       String?
+  logoData       Bytes?
+  accentColor    String   @default("#8B6CFF")
+  secondaryColor String   @default("#3FD6E8")
+  lobbyHeader    String?  @db.VarChar(60)
+  resultsTagline String?  @db.VarChar(80)
+  updatedAt      DateTime @updatedAt @db.Timestamptz(3)
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ContentReport {
+  id         String       @id @default(cuid())
+  kind       String
+  promptId   String?
+  roomCode   String?
+  /// Reported player's in-match id (no personal data)
+  playerId   String?
+  reason     String       @db.VarChar(500)
+  status     ReportStatus @default(OPEN)
+  createdAt  DateTime     @default(now()) @db.Timestamptz(3)
+  reviewedAt DateTime?    @db.Timestamptz(3)
+  prompt     Prompt?      @relation(fields: [promptId], references: [id], onDelete: SetNull)
+
+  @@index([status, createdAt])
+}
