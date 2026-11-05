@@ -166,8 +166,8 @@ export default function HomePage() {
                 <br />
                 <span className="text-chaos">Defend</span> what you don&apos;t.
               </h1>
-              <p className="deck mt-6 max-w-[30rem] text-ink-soft">
-                Guess how your friends really feel, argue sides you were handed, and catch whoever is bluffing. Everyone plays on their own phone while the stage goes on your TV.
+              <p className="deck mt-6 max-w-[27rem] text-ink-soft/85">
+                Guess how your friends really feel, defend sides you didn’t pick, and catch the bluffer. One phone each, the verdict on your TV.
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 <Button size="lg" onClick={() => toSummons("name")}>
@@ -186,14 +186,12 @@ export default function HomePage() {
         <section className="relative z-10 mx-auto max-w-6xl px-4 pt-16 lg:-mt-36 lg:pt-0" aria-label="Tonight's edition">
           <Reveal>
             <figure className="relative mx-auto max-w-[920px] -rotate-[1.2deg]">
-              <div className="overflow-hidden shadow-[0_2px_0_rgb(0_0_0/0.05),0_30px_60px_-20px_rgb(20_16_10/0.55)]">
-                <Image src="/art/paper/front-page.webp" alt="Front page of The Daily Verdict: The bench is empty. You're the judge." width={1536} height={1024} sizes="(min-width: 1024px) 920px, 92vw" className="h-auto w-full" />
+              <div className="drop-shadow-[0_24px_30px_rgb(20_16_10/0.5)]">
+                <Image src="/art/paper/front-page-cut.webp" alt="Front page of The Daily Verdict: The bench is empty. You're the judge." width={1501} height={990} sizes="(min-width: 1024px) 920px, 92vw" className="h-auto w-full" />
               </div>
               <img src="/art/props/tape.webp" alt="" aria-hidden className="absolute -top-4 left-[12%] w-28 -rotate-[8deg] opacity-90 sm:w-36" />
               <img src="/art/props/tape.webp" alt="" aria-hidden className="absolute -top-4 right-[12%] w-28 rotate-[6deg] opacity-90 sm:w-36" />
               <Stamp id="objection" label="Objection" rotate={-12} className="absolute -bottom-6 -left-3 w-36 sm:-bottom-10 sm:-left-10 sm:w-64" />
-              <img src="/art/avatars/cat.webp" alt="" aria-hidden className="absolute -right-3 top-1/3 w-16 rotate-12 sm:-right-10 sm:w-28" />
-              <img src="/art/avatars/flame.webp" alt="" aria-hidden className="absolute -right-2 top-[58%] hidden w-20 -rotate-6 sm:-right-14 sm:block" />
             </figure>
           </Reveal>
 
@@ -237,25 +235,42 @@ export default function HomePage() {
               </div>
 
               <Reveal>
-                <section id="play" aria-label="Play" className="relative z-10 -rotate-[0.6deg] bg-surface px-6 py-10 shadow-[0_40px_70px_-25px_rgb(0_0_0/0.8)] sm:px-12">
-                  {/* Legal document frame */}
-                  <div className="pointer-events-none absolute inset-3 border-[3px] border-double border-rule/70" aria-hidden />
-                  <div className="relative">
-                    <div className="flex items-baseline justify-between gap-4">
-                      <p className="kicker text-ink-faint">Official summons</p>
-                      <p className="kicker tabular text-ink-faint">Case no. {code.length === 4 ? code : "____"}</p>
-                    </div>
-                    <div className="rule-double mt-3" aria-hidden />
-                    <h3 id="summons-title" className="headline-md mt-6">
-                      You are hereby
-                      <br />
-                      summoned to play
-                    </h3>
-                    <p className="prose-text mt-3 text-ink-soft">Write your name, pick a sticker, then open a new case or answer one with its four letter number.</p>
+                <section
+                  id="play"
+                  aria-label="Play"
+                  className="relative z-10 -rotate-[0.6deg] bg-[#fbf9f3] bg-[url(/art/paper/legal-paper.webp)] bg-[length:640px_640px] py-10 pl-12 pr-5 font-legal text-ink shadow-[0_40px_70px_-25px_rgb(0_0_0/0.8)] sm:py-12 sm:pl-20 sm:pr-12"
+                >
+                  {/* Pleading paper: numbered lines and a double margin rule, as on a filed court document */}
+                  <ol aria-hidden className="pointer-events-none absolute bottom-12 left-0 top-12 flex w-8 flex-col justify-between pr-2 text-right text-[0.65rem] leading-none text-ink-faint sm:w-12 sm:pr-3 sm:text-[0.7rem]">
+                    {Array.from({ length: 28 }, (_, i) => (
+                      <li key={i}>{i + 1}</li>
+                    ))}
+                  </ol>
+                  <div aria-hidden className="pointer-events-none absolute inset-y-0 left-9 w-[4px] border-x border-[#9b2d26]/45 sm:left-14" />
+                  <div aria-hidden className="pointer-events-none absolute inset-y-0 right-3 border-r border-[#9b2d26]/25 sm:right-6" />
 
-                    <div className="mt-8 space-y-2">
-                      <Label htmlFor="name" className="kicker text-ink">
-                        Name of the accused
+                  <div className="relative">
+                    {/* Court header */}
+                    <p className="text-center text-[0.8rem] font-bold uppercase tracking-[0.24em]">In the Court of Public Opinion</p>
+                    <p className="mt-1 text-center text-sm italic text-ink-soft">Party Division, Living Room Circuit</p>
+
+                    <div className="mt-5 flex items-baseline justify-between gap-4 border-y border-ink/70 py-2 text-[0.8rem]">
+                      <span className="font-bold uppercase tracking-[0.16em]">Summons</span>
+                      <span>
+                        Case No. <span className="font-typed">{code.length === 4 ? code : "____"}</span>
+                      </span>
+                    </div>
+
+                    <h3 id="summons-title" className="mt-6 text-balance font-serif text-[clamp(2rem,5vw,2.9rem)] font-semibold leading-[1.04]">
+                      You are hereby summoned to play
+                    </h3>
+                    <p className="mt-4 text-[0.95rem] leading-7 text-ink-soft">
+                      <span className="font-bold uppercase tracking-[0.12em] text-ink">To the defendant:</span> you are summoned to appear before your friends and answer for your opinions. Write your name, pick a sticker, then open a new case or answer one with its four letter number.
+                    </p>
+
+                    <div className="mt-9 space-y-2">
+                      <Label htmlFor="name" className="font-legal text-[0.8rem] font-bold uppercase tracking-[0.16em] text-ink">
+                        1. Name of the accused
                       </Label>
                       <Input
                         id="name"
@@ -268,7 +283,7 @@ export default function HomePage() {
                         onChange={(e) => setName(e.target.value)}
                         placeholder="What should everyone call you?"
                         autoComplete="nickname"
-                        className="rounded-none border-0 border-b-2 border-rule bg-transparent px-0 font-serif text-xl focus-visible:border-chaos focus-visible:ring-0"
+                        className="rounded-none border-0 border-b border-ink bg-transparent px-0 font-typed text-xl placeholder:font-legal placeholder:text-base placeholder:italic focus-visible:border-chaos focus-visible:ring-0"
                         data-testid="name-input"
                       />
                       {error?.field === "name" && (
@@ -277,43 +292,62 @@ export default function HomePage() {
                         </p>
                       )}
                     </div>
-                    <div className="mt-8 space-y-2">
-                      <span className="kicker text-ink">Pick your sticker</span>
+                    <div className="mt-9 space-y-2">
+                      <span className="block text-[0.8rem] font-bold uppercase tracking-[0.16em]">2. Mark of the accused</span>
                       <AvatarPicker value={avatar} onChange={(a) => setAvatar(a as AvatarId)} idSeed="home" />
                     </div>
 
-                    <Button size="lg" className="mt-8 w-full" onClick={create} disabled={busy !== null} data-testid="create-room">
-                      <Users /> {busy === "create" ? "Opening court" : "Host a new room"}
-                    </Button>
+                    <div className="mt-9">
+                      <span className="block text-[0.8rem] font-bold uppercase tracking-[0.16em]">3. Proceedings</span>
+                      <Button size="lg" className="mt-3 w-full" onClick={create} disabled={busy !== null} data-testid="create-room">
+                        <Users /> {busy === "create" ? "Opening court" : "Host a new room"}
+                      </Button>
 
-                    <div className="kicker my-8 flex items-center gap-3 text-ink-faint">
-                      <span className="h-px flex-1 bg-rule/30" /> or answer an existing case <span className="h-px flex-1 bg-rule/30" />
+                      <div className="my-7 flex items-center gap-3 text-sm italic text-ink-faint">
+                        <span className="h-px flex-1 bg-ink/25" /> or answer an existing case <span className="h-px flex-1 bg-ink/25" />
+                      </div>
+
+                      <form onSubmit={join} className="flex gap-2" noValidate>
+                        <Label htmlFor="code" className="sr-only">
+                          Room code
+                        </Label>
+                        <Input
+                          id="code"
+                          ref={codeRef}
+                          value={code}
+                          aria-invalid={error?.field === "code"}
+                          onChange={(e) => setCode(e.target.value.toUpperCase().replace(/[^A-Z]/g, "").slice(0, 4))}
+                          placeholder="ABCD"
+                          className="h-12 bg-transparent font-typed text-xl tracking-[0.4em]"
+                          autoCapitalize="characters"
+                          data-testid="code-input"
+                        />
+                        <Button type="submit" size="lg" variant="secondary" disabled={busy !== null} data-testid="join-room">
+                          Join <ArrowRight />
+                        </Button>
+                      </form>
+                      {error && error.field !== "name" && (
+                        <p role="alert" className="caption-2 mt-4 text-chaos" data-testid="home-error">
+                          {error.text}
+                        </p>
+                      )}
                     </div>
 
-                    <form onSubmit={join} className="flex gap-2" noValidate>
-                      <Label htmlFor="code" className="sr-only">
-                        Room code
-                      </Label>
-                      <Input
-                        id="code"
-                        ref={codeRef}
-                        value={code}
-                        aria-invalid={error?.field === "code"}
-                        onChange={(e) => setCode(e.target.value.toUpperCase().replace(/[^A-Z]/g, "").slice(0, 4))}
-                        placeholder="ABCD"
-                        className="tabular h-12 text-xl tracking-[0.4em]"
-                        autoCapitalize="characters"
-                        data-testid="code-input"
-                      />
-                      <Button type="submit" size="lg" variant="secondary" disabled={busy !== null} data-testid="join-room">
-                        Join <ArrowRight />
-                      </Button>
-                    </form>
-                    {error && error.field !== "name" && (
-                      <p role="alert" className="caption-2 mt-4 text-chaos" data-testid="home-error">
-                        {error.text}
-                      </p>
-                    )}
+                    {/* Signature block */}
+                    <div className="mt-20 flex items-end justify-between gap-6 text-sm">
+                      <p className="italic text-ink-soft">Issued tonight, by order of the court.</p>
+                      <div className="relative w-40 shrink-0 text-center sm:w-48">
+                        {/* Embossed court seal pressed over the signature: a grey relief map blended into the paper */}
+                        <img
+                          src="/art/paper/court-seal.webp"
+                          alt=""
+                          aria-hidden
+                          className="pointer-events-none absolute -left-10 -top-11 w-28 rotate-[-12deg] opacity-75 mix-blend-hard-light sm:-left-14 sm:-top-14 sm:w-32"
+                        />
+                        <p className="relative font-typed text-ink-soft">/s/ The Clerk</p>
+                        <p className="mt-1 border-t border-ink pt-1 text-[0.7rem] font-bold uppercase tracking-[0.16em]">Clerk of the Court</p>
+                      </div>
+                    </div>
                   </div>
                 </section>
               </Reveal>
@@ -475,7 +509,7 @@ export default function HomePage() {
             {LETTERS.map((f) => (
               <details key={f.q} className="group mb-2 break-inside-avoid border-b border-line py-4">
                 <summary className="flex cursor-pointer list-none items-start justify-between gap-4 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan">
-                  <span className="heading-6 font-serif">{f.q}</span>
+                  <span className="heading-6 font-text">{f.q}</span>
                   <span aria-hidden className="tabular title-2 text-chaos transition-transform duration-500 ease-base group-open:rotate-45">
                     +
                   </span>

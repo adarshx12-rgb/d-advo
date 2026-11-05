@@ -8,7 +8,7 @@ Folder: `apps/web/public/fonts/` (create it). Format: `.woff2` (web licence requ
 These are picked up automatically through `@font-face` in `apps/web/app/globals.css`; no code change needed.
 
 - [x] Headline font: replaced Druk with our own **Docket Gothic** (placeholder name), built from Big Shoulders Display (free licence) by `tools/fonts/build_display_font.py`. Rename it when the game name is final.
-- [ ] `tiempos-headline-semibold.woff2` (Tiempos Headline Semibold, Klim)
+- [x] Serif headings: replaced Tiempos Headline with our own **Docket Serif** (placeholder name), traced from the glyph sheets in `public/art/font/` by `tools/fonts/build_serif_font.py`. Accented letters and kerning are not done yet.
 - [ ] `tiempos-text-regular.woff2` (Tiempos Text Regular, Klim)
 - [ ] `tiempos-text-regular-italic.woff2` (Tiempos Text Regular Italic, Klim)
 - [ ] `soehne-buch.woff2` (Söhne Buch, Klim)

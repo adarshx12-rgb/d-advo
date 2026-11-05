@@ -14,6 +14,17 @@
    "Press" has ink-spread edges for big headlines; "Clean" is the same letters with smooth edges. */
 @font-face { font-family: "Docket Gothic"; src: url("/fonts/docket-gothic-press.woff2") format("woff2"); font-weight: 900; font-display: swap; }
 @font-face { font-family: "Docket Gothic Clean"; src: url("/fonts/docket-gothic-clean.woff2") format("woff2"); font-weight: 900; font-display: swap; }
+/* Docket Serif: our own high-contrast poster serif, traced from the glyph sheets in public/art/font by
+   tools/fonts/build_serif_font.py. Display sizes only (about 28px and up): the hairlines vanish when small. */
+@font-face { font-family: "Docket Serif"; src: url("/fonts/docket-serif.woff2") format("woff2"); font-weight: 400 900; font-display: swap; }
+/* Libre Caslon Text and Courier Prime (SIL Open Font License, licences in /fonts/): the legal summons only. */
+@font-face { font-family: "Libre Caslon Text"; src: url("/fonts/libre-caslon-text-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Libre Caslon Text"; src: url("/fonts/libre-caslon-text-400-italic.woff2") format("woff2"); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: "Libre Caslon Text"; src: url("/fonts/libre-caslon-text-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Courier Prime"; src: url("/fonts/courier-prime-400.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Courier Prime"; src: url("/fonts/courier-prime-700.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+/* Instrument Sans (SIL Open Font License, licence in /fonts/OFL-instrument-sans.txt): decks and standfirsts. */
+@font-face { font-family: "Instrument Sans"; src: url("/fonts/instrument-sans.woff2") format("woff2"); font-weight: 400 700; font-style: normal; font-display: swap; }
 @font-face { font-family: "Tiempos Headline"; src: url("/fonts/tiempos-headline-semibold.woff2") format("woff2"); font-weight: 600; font-display: swap; }
 @font-face { font-family: "Tiempos Text"; src: url("/fonts/tiempos-text-regular.woff2") format("woff2"); font-weight: 400; font-display: swap; }
 @font-face { font-family: "Tiempos Text"; src: url("/fonts/tiempos-text-regular-italic.woff2") format("woff2"); font-weight: 400; font-style: italic; font-display: swap; }
@@ -49,8 +60,11 @@
   --font-sans: "Söhne", ui-sans-serif, system-ui, "Segoe UI", sans-serif;
   --font-mono: "Söhne Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
   --font-display: "Docket Gothic", Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
-  --font-serif: "Tiempos Headline", "Tiempos Text", Georgia, "Times New Roman", serif;
+  --font-serif: "Docket Serif", "Tiempos Headline", Georgia, "Times New Roman", serif;
   --font-text: "Tiempos Text", Georgia, "Times New Roman", serif;
+  --font-deck: "Instrument Sans", system-ui, "Segoe UI", sans-serif;
+  --font-legal: "Libre Caslon Text", Georgia, "Times New Roman", serif;
+  --font-typed: "Courier Prime", "Courier New", monospace;
 
   --ease-base: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-stamp: cubic-bezier(0.3, 1.5, 0.5, 1);
@@ -91,17 +105,17 @@
 @utility headline-md { font-family: var(--font-display); font-weight: 900; text-transform: uppercase; font-size: clamp(2rem, 4vw, 3.25rem); line-height: 0.9; letter-spacing: 0.01em; text-wrap: balance; }
 @utility headline-sm { font-family: var(--font-display); font-weight: 900; text-transform: uppercase; font-size: 1.75rem; line-height: 0.95; letter-spacing: 0.015em; }
 /* Masthead and editorial serif. */
-@utility masthead { font-family: var(--font-serif); font-weight: 600; letter-spacing: -0.01em; line-height: 1; }
-@utility deck { font-family: var(--font-text); font-style: italic; font-size: 1.25rem; line-height: 1.75rem; text-wrap: pretty; }
+@utility masthead { font-family: var(--font-serif); font-weight: 600; letter-spacing: 0; line-height: 1; }
+@utility deck { font-family: var(--font-deck); font-style: normal; font-weight: 400; font-size: 1rem; line-height: 1.7rem; letter-spacing: 0.01em; text-wrap: pretty; }
 @utility prose-text { font-family: var(--font-text); font-size: 1rem; line-height: 1.6rem; text-wrap: pretty; }
 /* Small caps labels: datelines, kickers, section flags. */
 @utility kicker { font-family: var(--font-mono); font-size: 0.75rem; line-height: 1rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.12em; }
 
 /* UI headings use the editorial serif at the top, Söhne below. */
-@utility heading-1 { font-family: var(--font-serif); font-size: var(--text-6xl); line-height: 1; font-weight: 600; text-wrap: balance; letter-spacing: -0.02em; }
-@utility heading-2 { font-family: var(--font-serif); font-size: var(--text-5xl); line-height: 1.05; font-weight: 600; text-wrap: balance; letter-spacing: -0.02em; }
-@utility heading-3 { font-family: var(--font-serif); font-size: var(--text-4xl); line-height: 2.5rem; font-weight: 600; text-wrap: balance; letter-spacing: -0.015em; }
-@utility heading-4 { font-family: var(--font-serif); font-size: var(--text-3xl); line-height: 2.25rem; font-weight: 600; text-wrap: balance; letter-spacing: -0.01em; }
+@utility heading-1 { font-family: var(--font-serif); font-size: var(--text-6xl); line-height: 1; font-weight: 600; text-wrap: balance; letter-spacing: 0; }
+@utility heading-2 { font-family: var(--font-serif); font-size: var(--text-5xl); line-height: 1.05; font-weight: 600; text-wrap: balance; letter-spacing: 0; }
+@utility heading-3 { font-family: var(--font-serif); font-size: var(--text-4xl); line-height: 2.5rem; font-weight: 600; text-wrap: balance; letter-spacing: 0; }
+@utility heading-4 { font-family: var(--font-serif); font-size: var(--text-3xl); line-height: 2.25rem; font-weight: 600; text-wrap: balance; letter-spacing: 0; }
 @utility heading-5 { font-size: var(--text-2xl); line-height: 2rem; font-weight: 600; text-wrap: balance; letter-spacing: -0.01em; }
 @utility heading-6 { font-size: var(--text-xl); line-height: 1.75rem; font-weight: 600; text-wrap: balance; }
 @utility title-1 { font-size: var(--text-xl); line-height: 1.75rem; font-weight: 500; }
